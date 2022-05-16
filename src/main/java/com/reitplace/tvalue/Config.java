@@ -12,6 +12,10 @@ public class Config {
     public static HashMap<String, String> locationCodeMap = new HashMap<String, String>();
     public static HashMap<String, String> actionCodesMap = new HashMap<String, String>();
 
+    public static HashMap<String, String> dbConfigMap = new HashMap<String, String>();
+
+    private String persistMode = null;
+
     // Load from file
     public void loadConfig() throws Exception {
 
@@ -69,6 +73,12 @@ public class Config {
             }
             Console.debug("locationCodeMap => "+locationCodeMap);
 
+            dbConfigMap.put(Constants.DB_URL,prop.getProperty(Constants.DB_URL));
+            dbConfigMap.put(Constants.DB_USER,prop.getProperty(Constants.DB_USER));
+            dbConfigMap.put(Constants.DB_PASWD,prop.getProperty(Constants.DB_PASWD));
+            dbConfigMap.put(Constants.DB_INV_TABLE,prop.getProperty(Constants.DB_INV_TABLE));
+
+            this.setPersistMode(prop.getProperty(Constants.PERSISTENCE_MODE));
 
 
         } catch (IOException ex) {
@@ -118,4 +128,11 @@ public class Config {
 
     }
 
+    public String getPersistMode() {
+        return persistMode;
+    }
+
+    public void setPersistMode(String persistMode) {
+        this.persistMode = persistMode;
+    }
 }

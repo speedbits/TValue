@@ -20,6 +20,7 @@ public class HGTVInvTrack {
     private final static String startTimestamp = (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")).format(new Date());
 
     private static String InventoryFile = null;
+    private static String DataFolderPath = "./data";
     private static File file = null;
 
 
@@ -43,8 +44,13 @@ public class HGTVInvTrack {
 
         // scan user ID
         String userId = scanUserID(buffer);
-        InventoryFile = "./data/INV_"+userId+"_"+startTimestamp+".csv";
+
+        InventoryFile = DataFolderPath+ "/INV_"+userId+"_"+startTimestamp+".csv";
         file = new File(InventoryFile);
+        File dataFolder = new File(DataFolderPath);
+        if(!dataFolder.exists()) {
+            dataFolder.mkdirs();
+        }
         Console.debug("Filename => "+InventoryFile);
 
         //HashMap<String, String> record = new HashMap<String, String>();
@@ -66,6 +72,7 @@ public class HGTVInvTrack {
          * HGTVSA1000A12
          * 123456789001
          * HGTV000Q25000    [zero qty: HGTV000Q00000 ]
+         *  -> Exit: HGTV000X00000
          * HGTV000Q25000
          * 123456789003
          * HGTV000Q25000

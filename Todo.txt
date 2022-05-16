@@ -1,0 +1,17 @@
+
+
+1. Can we only have Qty as manual entry and NOT scan?
+
+Limitations:
+If we scan Qty multiple times to aggregate Qtys for same UPC, the each Qty scan will produce a record.
+When we load the record into DB, then we have to only pick the latest record
+Aisle,12,Section,A1,123456789001,25,000200,2022-05-14 15:29:53,true
+Aisle,12,Section,A1,123456789001,50,000200,2022-05-14 15:29:53,true <-- Pick this
+Aisle,12,Section,A1,345126789002,15,000200,2022-05-14 15:29:53,true
+Aisle,12,Section,A1,345126789002,40,000200,2022-05-14 15:29:53,true <-- Pick this
+
+
+2. When a Product is added, then immediately you enter Delete action tag, then that Product is deleted.
+This seems to be fine function, but if you don't want it then we may have to reset Product when Delete action is performed.
+This makes the code complicated. We could prompt, "Do you want to delete item (Yes/No)?" as a solution.
+
