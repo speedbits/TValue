@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.reitplace.tvalue.HGTVInvTrack
+Main-Class: com.reitplace.tvalue.HGTVInvTrackV2
 

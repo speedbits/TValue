@@ -37,7 +37,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.reitplace.tvalue.HGTVInvTrack</mainClass>
+                            <mainClass>com.reitplace.tvalue.HGTVInvTrackV2</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
