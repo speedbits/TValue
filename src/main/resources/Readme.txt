@@ -13,7 +13,12 @@ host:  localhost
 port: 3306
 root/mactiger or roottiger
 
-
+0n Linux/Mac
+============
 java -cp  ./target/TValue-1.0-SNAPSHOT.jar:./jars/mysql-connector-java-8.0.29.jar:./jars/opencsv-3.8.jar com.reitplace.tvalue.HGTVInvTrackV2
 
+On Windows
+==========
+ java -classpath  D:\git\Projects\TValue/jars/* com.reitplace.tvalue.HGTVInvTrackV2
+ (make sure all the Jars in one place and refer to that folder)
 

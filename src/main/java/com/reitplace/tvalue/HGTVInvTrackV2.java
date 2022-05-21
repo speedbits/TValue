@@ -24,6 +24,8 @@ public class HGTVInvTrackV2 {
     /**
      * HGTVUSR000287
      *
+     * HGTVMDE000001 (001 = Product only), HGTVMDE000001 (002 = Product+Qty mode)
+     *
      * HGTVSA1000A12
      * 123456789001
      * HGTV000Q25000    [zero qty: HGTV000Q00000 ]
@@ -107,6 +109,7 @@ public class HGTVInvTrackV2 {
                     }
 
                     workFlow.performStep(inputTag, record);
+                    Console.debug("Record (after performStep) => " + record);
 
                     // If any other action, then there is no need to proceed further
                     // as the action would have been performed above
@@ -123,7 +126,16 @@ public class HGTVInvTrackV2 {
                             Console.out("Record added successfully");
                             // record.resetProduct(); //Not needed, since when a new UPC is scanned, the product is reset
                         } else {
-                            Console.out("Record failed to update the file. Resolve and restart the application.");
+                            Console.out("Record failed to update. Resolve and restart the application.");
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+                    } else if (record.isProductOnlyComplete() &&
+                            Constants.SCAN_MODE_PROD_ONLY.equalsIgnoreCase(record.getScanMode())) {
+                        if (actions.saveRecord(record)) {
+                            Console.out("Product added successfully");
+                            // record.resetProduct(); //Not needed, since when a new UPC is scanned, the product is reset
+                        } else {
+                            Console.out("Product failed to update. Resolve and restart the application.");
                             Toolkit.getDefaultToolkit().beep();
                         }
                     }

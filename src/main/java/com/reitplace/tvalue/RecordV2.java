@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class RecordV2 {
 
+    private String scanMode = null;
     private String user = null;
     LocationV2 location = new LocationV2();
     Product product = new Product();
@@ -53,6 +54,10 @@ public class RecordV2 {
         return (this.user != null) ? true : false;
     }
 
+    public boolean isScanModeSet() {
+        return (this.scanMode != null) ? true : false;
+    }
+
     public boolean isLocationSet() {
         return (this.location != null && this.location.getPrimary() != null && this.location.getPrimaryValue() != null)? true : false;
     }
@@ -65,14 +70,28 @@ public class RecordV2 {
         return (this.product != null && this.product.getQty() > -1)?true:false;
     }
 
+    /**
+     * If user, Location, UPC, Qty are set, then record is considered complete
+     * @return
+     */
     public boolean isRecordComplete() {
         if (isUserSet() && isLocationSet() && isUPCSet() && isQtySet()) return true;
+        else return false;
+    }
+
+    /**
+     * If user, Location and UPC are set, then Product only is considered complete
+     * @return
+     */
+    public boolean isProductOnlyComplete() {
+        if (isUserSet() && isLocationSet() && isUPCSet()) return true;
         else return false;
     }
 
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("User => ").append(this.user).append(",");
+        buf.append("ScanMode => ").append(this.scanMode).append(",");
         buf.append("Location => ").append(this.location).append(",");
         buf.append("Product => ").append(this.product).append(".");
 
@@ -112,5 +131,13 @@ public class RecordV2 {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getScanMode() {
+        return scanMode;
+    }
+
+    public void setScanMode(String scanMode) {
+        this.scanMode = scanMode;
     }
 }

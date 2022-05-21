@@ -12,11 +12,15 @@ public class Constants {
     public final static String HG_IDENTIFIER = "HGTV";
     public final static int HG_TAG_LENGTH = 13;
     public final static String HG_USER_IDENTIFIER = "USR";
+    public final static String HG_MODE_IDENTIFIER = "MDE";
     public final static int UPC_TAG_MIN_LENGTH = 4;
     public final static int UPC_QTY_TAG_MAX_LENGTH = 3;
 
     public final static String PERSIST_MODE_FILE = "file";
     public final static String PERSIST_MODE_DB = "db";
+
+    public final static String SCAN_MODE_PROD_ONLY = "000001";
+    public final static String SCAN_MODE_PROD_AND_QTY = "000002";
 
 
     // Tag Types defined for Version-2
@@ -25,6 +29,8 @@ public class Constants {
     public final static int TagTypeUPC = 102;
     public final static int TagTypeQty = 103;
     public final static int TagTypeAction = 104;
+
+    public final static int TagTypeMode = 105;
     public final static int TagTypeInvalid = 999;
 
     // Action codes

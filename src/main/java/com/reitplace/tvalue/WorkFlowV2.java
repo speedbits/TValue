@@ -18,15 +18,19 @@ public class WorkFlowV2 {
             case Constants.TagTypeUser:
                 canPerform = true;
                 break;
-            case Constants.TagTypeLocation:
-                Console.debug("Location tag swtich record.isUserSet() => "+record.isUserSet());
+            case Constants.TagTypeMode:
                 if(record.isUserSet()) canPerform = true;
+                break;
+            case Constants.TagTypeLocation:
+                Console.debug("Location tag  record.isUserSet() => "+record.isUserSet());
+                Console.debug("Mode tag  record.isScanModeSet() => "+record.isScanModeSet());
+                if(record.isUserSet() && record.isScanModeSet()) canPerform = true;
                 break;
             case Constants.TagTypeUPC:
                 if(record.isLocationSet()) canPerform = true;
                 break;
             case Constants.TagTypeQty:
-                Console.debug("TagTypeQty tag swtich record.isUPCSet() => "+record.isUserSet());
+                Console.debug("TagTypeQty tag  record.isUPCSet() => "+record.isUserSet());
                 if(record.isUPCSet()) canPerform = true;
                 break;
             case Constants.TagTypeAction:
@@ -61,6 +65,12 @@ public class WorkFlowV2 {
                 this.actions.setupRepository(userId);
                 Console.out("User Logged.");
                 break;
+            case Constants.TagTypeMode:
+                // Reset product and set Location, set scan mode
+                record.setScanMode((String)inputTag.getInputObject());
+                record.resetProduct();
+                record.resetLocation();
+                break;
             case Constants.TagTypeLocation:
                 // Reset product and set Location
                 record.resetProduct();
@@ -71,6 +81,15 @@ public class WorkFlowV2 {
                 record.getProduct().reset();
                 Console.debug("TagTypeQty setting UPC => "+((String) inputTag.getInputObject()));
                 record.getProduct().setUpc((String) inputTag.getInputObject());
+                /**
+                 * Displays only when
+                 *  Persistence Mode = DB (db)
+                 *  UPC  found in DB, else nothing is displayed
+                 */
+
+                if(Constants.PERSIST_MODE_DB.equalsIgnoreCase(actions.getConfig().getPersistMode())) {
+                    getAndDisplayProductsByUPC((String) inputTag.getInputObject());
+                }
                 break;
             case Constants.TagTypeQty:
                 // If quantity in the product has positive value, then add to it else set it
@@ -105,14 +124,8 @@ public class WorkFlowV2 {
 
                 } else if (Constants.ACTION_FIND_PRODUCT.equalsIgnoreCase(actionCode)) {
                     // get the product associated to record from DB and display
-                    ArrayList<RecordV2> recs =  actions.getRecordsByUPC(record.getProduct().getUpc());
-                    if (recs != null && !recs.isEmpty()) {
-                        Iterator itr = recs.iterator();
-                        while (itr.hasNext()) {
-                            RecordV2 rec = (RecordV2) itr.next();
-                            Console.out(rec.toDisplay(actions.getConfig()), Console.ANSI_GREEN);
-                        }
-                    } else {
+                    boolean alertWhenNoneFound = getAndDisplayProductsByUPC(record.getProduct().getUpc());
+                    if(alertWhenNoneFound) {
                         Console.out("Could not locate product => "+record.getProduct().toDisplay(), Console.ANSI_RED);
                     }
 
@@ -131,6 +144,18 @@ public class WorkFlowV2 {
             default:
                 Console.out("Unknown Step", Console.ANSI_RED);
         }
+    }
+
+    private boolean getAndDisplayProductsByUPC(String upc) throws Exception {
+        ArrayList<RecordV2> recs =  actions.getRecordsByUPC(upc);
+        if (recs != null && !recs.isEmpty()) {
+            Iterator itr = recs.iterator();
+            while (itr.hasNext()) {
+                RecordV2 rec = (RecordV2) itr.next();
+                Console.out(rec.toDisplay(actions.getConfig()), Console.ANSI_GREEN);
+            }
+        }  else return false;
+        return true;
     }
 }
 

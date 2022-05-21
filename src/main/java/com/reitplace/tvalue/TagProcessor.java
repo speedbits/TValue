@@ -16,6 +16,11 @@ public class TagProcessor {
             Console.debug("User Tag identified => "+iTag.getTagType());
             return iTag;
         }
+        iTag = isValidMode(input);
+        if (iTag != null && iTag.getTagType() != Constants.TagTypeInvalid) {
+            Console.debug("Mode Tag identified => "+iTag.getTagType());
+            return iTag;
+        }
         iTag = isValidLocation(input);
         if (iTag != null && iTag.getTagType() != Constants.TagTypeInvalid) {
             Console.debug("Location Tag identified => "+iTag.getTagType());
@@ -38,9 +43,6 @@ public class TagProcessor {
             return iTag;
         }
 
-
-
-
         return iTag;
     }
 
@@ -58,6 +60,25 @@ public class TagProcessor {
 
             Console.debug("UserID: input => "+input);
             iTag = new InputTag(Constants.TagTypeUser, input.substring(7,13));
+        }
+
+        return iTag;
+    }
+
+    /**
+     * Example mode tag: HGTVMDE000001
+     * @param input String represents the scan mode tag (e.g 001 = Product only scan mode, 002 = Product+Qty scan mode)
+     * @return InputTag
+     */
+    private InputTag isValidMode(String input) {
+        InputTag iTag =new InputTag(Constants.TagTypeInvalid, null);
+
+        Console.debug("Mode "+input+" (length => "+input.length()+")");
+        if (input.toUpperCase().startsWith(Constants.HG_IDENTIFIER) && input.length() == Constants.HG_TAG_LENGTH
+                && Constants.HG_MODE_IDENTIFIER.equalsIgnoreCase(input.substring(4,7)) ) {
+
+            Console.debug("ModeID: input => "+input);
+            iTag = new InputTag(Constants.TagTypeMode, input.substring(7,13));
         }
 
         return iTag;
